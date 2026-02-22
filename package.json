@@ -1,6 +1,6 @@
 {
   "name": "opencode-commits",
-  "version": "0.0.1",
+  "version": "0.0.1-next.0",
   "description": "An OpenCode plugin that enforces Conventional Commits by validating commit messages before they reach git",
   "keywords": [
     "opencode",

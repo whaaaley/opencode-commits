@@ -1,60 +1,68 @@
 # opencode-commits
 
-An [OpenCode](https://opencode.ai) plugin that enforces [Conventional Commits](https://www.conventionalcommits.org/) by validating commit messages before they reach git. Provides tools for committing, amending, diffing, and viewing git log -- all with built-in message parsing and validation.
+An [OpenCode](https://opencode.ai) plugin that enforces [Conventional Commits](https://www.conventionalcommits.org/) by validating commit messages before they reach git. Provides tools for committing, amending, diffing, and viewing git log, all with built-in message parsing and validation.
 
 ## Quick Start
 
-Add `opencode-commits` to your `opencode.json` plugin list:
+Add to your `opencode.json`:
 
 ```json
 {
-  "plugin": [
-    "opencode-commits"
-  ]
+  "plugin": ["opencode-commits"]
 }
 ```
 
+Restart OpenCode. The plugin will be installed automatically.
+
 ## Tools
-
-### git-commit
-
-Validate and commit staged changes with a conventional commit message.
-
-| Parameter | Type   | Required | Description                       |
-| --------- | ------ | -------- | --------------------------------- |
-| message   | string | Yes      | Conventional commit message       |
-
-Returns the git commit output on success. Rejects with validation errors and suggestions if the message is malformed.
 
 ### git-amend
 
 Amend the last commit with a new validated conventional commit message.
 
-| Parameter | Type   | Required | Description                       |
-| --------- | ------ | -------- | --------------------------------- |
-| message   | string | Yes      | Conventional commit message       |
+| Parameter | Type   | Required |
+| --------- | ------ | -------- |
+| `message` | string | yes      |
+
+### git-commit
+
+Validate and commit staged changes with a conventional commit message.
+
+| Parameter | Type   | Required |
+| --------- | ------ | -------- |
+| `message` | string | yes      |
+
+Returns the git commit output on success. Rejects with validation errors and suggestions if the message is malformed.
 
 ### git-diff
 
 Show the currently staged diff.
 
-No parameters. Returns the output of `git diff --staged`, or a notice if nothing is staged.
-
-### git-status
-
-Show the working tree status including staged, unstaged, and untracked files.
-
-No parameters. Returns the output of `git status`.
+| Parameter | Type    | Required | Description                          |
+| --------- | ------- | -------- | ------------------------------------ |
+| `staged`  | boolean | no       | Show staged changes (default: true)  |
 
 ### git-log
 
 List recent commits.
 
-| Parameter | Type   | Required | Description                          |
-| --------- | ------ | -------- | ------------------------------------ |
-| count     | number | No       | Number of commits to show (default: 10) |
+| Parameter | Type   | Required | Description                             |
+| --------- | ------ | -------- | --------------------------------------- |
+| `count`   | number | no       | Number of commits to show (default: 10) |
 
-Returns the output of `git log --oneline -n <count>`.
+### git-status
+
+Show the working tree status including staged, unstaged, and untracked files.
+
+No parameters.
+
+### git-undo
+
+Undo recent commits by resetting HEAD, keeping changes staged.
+
+| Parameter | Type   | Required | Description                             |
+| --------- | ------ | -------- | --------------------------------------- |
+| `count`   | number | no       | Number of commits to undo (default: 1)  |
 
 ## Conventional Commits
 
@@ -96,9 +104,7 @@ To ensure all git commit operations go through the plugin's validation, disable 
 
 ```json
 {
-  "plugin": [
-    "opencode-commits"
-  ],
+  "plugin": ["opencode-commits"],
   "permission": {
     "bash": {
       "git commit *": "deny",

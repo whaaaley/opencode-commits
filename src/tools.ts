@@ -66,16 +66,20 @@ export const createAmendTool = ($: BunShell, config: CommitsConfig) => {
 export const createDiffTool = ($: BunShell) => {
   return tool({
     description: 'Show the currently staged diff',
-    args: {},
-    async execute() {
-      const result = await safeAsync(() => $`git diff --staged`.text())
+    args: {
+      staged: tool.schema.boolean().optional().describe('Show staged changes (default: true)'),
+    },
+    async execute(args) {
+      const flag = args.staged === false ? '' : '--staged'
+
+      const result = await safeAsync(() => $`git diff ${flag}`.text())
       if (result.error) {
-        return `**Error:** Failed to get staged diff: ${result.error.message}`
+        return `**Error:** Failed to get diff: ${result.error.message}`
       }
 
       const trimmed = result.data.trim()
       if (!trimmed) {
-        return 'Nothing is currently staged.'
+        return flag ? 'Nothing is currently staged.' : 'No unstaged changes.'
       }
 
       return `\`\`\`diff\n${trimmed}\n\`\`\``
@@ -103,6 +107,25 @@ export const createLogTool = ($: BunShell) => {
       }
 
       return `\`\`\`\n${trimmed}\n\`\`\``
+    },
+  })
+}
+
+export const createUndoTool = ($: BunShell) => {
+  return tool({
+    description: 'Undo recent commits by resetting HEAD, keeping changes staged',
+    args: {
+      count: tool.schema.number().optional().describe('Number of commits to undo (default: 1)'),
+    },
+    async execute(args) {
+      const count = args.count ?? 1
+
+      const result = await safeAsync(() => $`git reset --soft HEAD~${count}`.text())
+      if (result.error) {
+        return `**Error:** Failed to undo commits: ${result.error.message}`
+      }
+
+      return `**Undid ${count} commit${count > 1 ? 's' : ''}** (changes kept staged)`
     },
   })
 }

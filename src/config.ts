@@ -54,7 +54,9 @@ export const loadConfig = async (directory: string): Promise<CommitsConfig> => {
 }
 
 export const getAllScopes = (config: CommitsConfig): string[] | undefined => {
-  if (!config.scopes) return undefined
+  if (!config.scopes) {
+    return undefined
+  }
 
   return Object.values(config.scopes).flat()
 }

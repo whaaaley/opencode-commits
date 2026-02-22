@@ -5,7 +5,7 @@ import type { BunShell } from './shell.ts'
 import { safe, safeAsync } from './utils/safe.ts'
 import { validateCommitMessage } from './validator.ts'
 
-const formatValidationError = (error: Error): string => {
+export const formatValidationError = (error: Error): string => {
   if (isCommitError(error)) {
     let message = `**Error:** ${error.message}`
 

@@ -88,7 +88,9 @@ Scopes are optional and configurable. When provided, they must:
 
 Invalid messages are rejected with specific error details and suggestions for how to fix them.
 
-## Recommended Setup
+### Unsupported Features
+
+- **Breaking change indicator (`!`)** is not currently supported. Messages like `feat!: description` or `feat(scope)!: description` will be rejected by the parser.
 
 To ensure all git commit operations go through the plugin's validation, disable direct `git commit` access in your `opencode.json` permissions. This forces the agent to use the plugin's tools instead of calling git directly, so every commit is validated against your conventions.
 

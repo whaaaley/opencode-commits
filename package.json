@@ -1,0 +1,56 @@
+{
+  "name": "opencode-commits",
+  "version": "0.0.1",
+  "description": "An OpenCode plugin that enforces Conventional Commits by validating commit messages before they reach git",
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "plugin",
+    "git",
+    "commits",
+    "conventional-commits"
+  ],
+  "homepage": "https://github.com/whaaaley/opencode-commits#readme",
+  "bugs": {
+    "url": "https://github.com/whaaaley/opencode-commits/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whaaaley/opencode-commits.git"
+  },
+  "license": "MIT",
+  "author": "Dustin Dowell",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/commits.js",
+      "types": "./dist/commits.d.ts"
+    }
+  },
+  "main": "./dist/commits.js",
+  "types": "./dist/commits.d.ts",
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "clean": "rm -rf dist",
+    "fmt": "bun run dprint fmt",
+    "prepublishOnly": "npm run build",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "zod": "4.1.8"
+  },
+  "devDependencies": {
+    "@opencode-ai/plugin": "1.1.12",
+    "@types/bun": "latest",
+    "dprint": "^0.49.1",
+    "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "@opencode-ai/plugin": ">=0.13.7"
+  }
+}

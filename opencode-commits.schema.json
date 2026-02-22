@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "types": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Allowed commit types",
+      "default": ["feat", "fix", "build", "chore", "ci", "docs", "style", "refactor", "perf", "test", "revert"]
+    },
+    "scopes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "description": "Allowed scopes grouped by category"
+    },
+    "maxLength": {
+      "type": "number",
+      "description": "Maximum commit message length",
+      "default": 72
+    }
+  },
+  "additionalProperties": false
+}

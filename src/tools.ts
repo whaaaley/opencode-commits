@@ -1,24 +1,18 @@
 import type { PluginInput } from '@opencode-ai/plugin'
 import { tool } from '@opencode-ai/plugin'
 import type { CommitsConfig } from './config.ts'
-import { isCommitError } from './errors.ts'
+import { ParseError } from './parser.ts'
 import { safe, safeAsync } from './safe.ts'
 import { validateCommitMessage } from './validator.ts'
 
 type BunShell = PluginInput['$']
 
 export const formatValidationError = (error: Error): string => {
-  if (isCommitError(error)) {
-    let message = `Error: ${error.message}`
-
-    if (error.suggestions.length > 0) {
-      message += '\n\nSuggestions:\n' + error.suggestions.map(s => `- ${s}`).join('\n')
-    }
-
-    return message
+  if (error instanceof ParseError && error.suggestions.length > 0) {
+    return error.message + '\n\nSuggestions:\n' + error.suggestions.map(s => `- ${s}`).join('\n')
   }
 
-  return `Error: ${error.message}`
+  return error.message
 }
 
 export const createCommitTool = ($: BunShell, config: CommitsConfig) => {

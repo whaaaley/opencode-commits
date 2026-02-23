@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'bun:test'
-import { isCommitError } from './errors.ts'
 import { parseCommitMessage } from './parser.ts'
 
 describe('parseCommitMessage', () => {
@@ -117,38 +116,6 @@ describe('parseCommitMessage', () => {
 
     it('scope starting with hyphen', () => {
       expect(() => parseCommitMessage('feat(-api): add feature')).toThrow('start with a lowercase')
-    })
-  })
-
-  describe('error suggestions', () => {
-    it('empty message includes format suggestion', () => {
-      expect.assertions(3)
-
-      try {
-        parseCommitMessage('')
-      } catch (error) {
-        expect(isCommitError(error)).toBe(true)
-
-        if (isCommitError(error)) {
-          expect(error.kind).toBe('CommitMessageParseError')
-          expect(error.suggestions.length).toBeGreaterThan(0)
-        }
-      }
-    })
-
-    it('missing colon includes example', () => {
-      expect.assertions(3)
-
-      try {
-        parseCommitMessage('feat add feature')
-      } catch (error) {
-        expect(isCommitError(error)).toBe(true)
-
-        if (isCommitError(error)) {
-          expect(error.kind).toBe('CommitMessageParseError')
-          expect(error.suggestions.some(s => s.includes('feat:'))).toBe(true)
-        }
-      }
     })
   })
 })

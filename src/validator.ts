@@ -1,7 +1,6 @@
 import type { CommitsConfig } from './config.ts'
 import { getAllScopes } from './config.ts'
-import { commitValidationError } from './errors.ts'
-import { parseCommitMessage } from './parser.ts'
+import { ParseError, parseCommitMessage } from './parser.ts'
 
 export const validateCommitMessage = (message: string, config: CommitsConfig): void => {
   const parsed = parseCommitMessage(message)
@@ -14,32 +13,32 @@ export const validateCommitMessage = (message: string, config: CommitsConfig): v
       ? [`Did you mean: ${close.join(', ')}?`]
       : [`Valid types are: ${config.types.join(', ')}`]
 
-    throw commitValidationError(`Invalid commit type: "${parsed.type}"`, suggestions)
+    throw new ParseError(`Invalid commit type: "${parsed.type}"`, suggestions)
   }
 
   const allowedScopes = getAllScopes(config)
   if (parsed.scope && allowedScopes) {
     if (!allowedScopes.includes(parsed.scope)) {
-      throw commitValidationError(`Invalid scope: "${parsed.scope}"`, [
+      throw new ParseError(`Invalid scope: "${parsed.scope}"`, [
         `Allowed scopes are: ${allowedScopes.join(', ')}`,
       ])
     }
   }
 
   if (/^[A-Z]/.test(parsed.description)) {
-    throw commitValidationError('Description must start with a lowercase letter', [
+    throw new ParseError('Description must start with a lowercase letter', [
       `Change "${parsed.description}" to start with a lowercase letter`,
     ])
   }
 
   if (/[.!,;:]$/.test(parsed.description)) {
-    throw commitValidationError('Description must not end with punctuation', [
+    throw new ParseError('Description must not end with punctuation', [
       `Remove the trailing "${parsed.description.slice(-1)}" from the description`,
     ])
   }
 
   if (parsed.raw.length > config.maxLength) {
-    throw commitValidationError(
+    throw new ParseError(
       `Commit message exceeds ${config.maxLength} characters (${parsed.raw.length})`,
       ['Be more concise'],
     )

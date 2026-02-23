@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { ParseError } from './parser.ts'
+import { ParseError } from './errors.ts'
 import { formatValidationError } from './tools.ts'
 
 describe('formatValidationError', () => {

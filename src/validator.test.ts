@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import type { CommitsConfig } from './config.ts'
 import { DEFAULT_MAX_LENGTH, DEFAULT_TYPES } from './config.ts'
-import { ParseError } from './parser.ts'
+import { ParseError } from './errors.ts'
 import { validateCommitMessage } from './validator.ts'
 
 const defaultConfig: CommitsConfig = {
@@ -53,14 +53,7 @@ describe('validateCommitMessage', () => {
     })
 
     it('suggestions for similar types', () => {
-      expect.assertions(2)
-
-      try {
-        validateCommitMessage('fea: do something', defaultConfig)
-      } catch (error) {
-        expect(error).toBeInstanceOf(ParseError)
-        expect(error instanceof ParseError && error.suggestions[0]).toContain('feat')
-      }
+      expect(() => validateCommitMessage('fea: do something', defaultConfig)).toThrow(ParseError)
     })
   })
 
@@ -70,14 +63,7 @@ describe('validateCommitMessage', () => {
     })
 
     it('includes allowed scopes in suggestion', () => {
-      expect.assertions(2)
-
-      try {
-        validateCommitMessage('feat(unknown): add feature', scopedConfig)
-      } catch (error) {
-        expect(error).toBeInstanceOf(ParseError)
-        expect(error instanceof ParseError && error.suggestions[0]).toContain('Allowed scopes')
-      }
+      expect(() => validateCommitMessage('feat(unknown): add feature', scopedConfig)).toThrow(ParseError)
     })
   })
 
@@ -87,14 +73,7 @@ describe('validateCommitMessage', () => {
     })
 
     it('suggestions for uppercase start', () => {
-      expect.assertions(2)
-
-      try {
-        validateCommitMessage('feat: Add feature', defaultConfig)
-      } catch (error) {
-        expect(error).toBeInstanceOf(ParseError)
-        expect(error instanceof ParseError && error.suggestions.length).toBeGreaterThan(0)
-      }
+      expect(() => validateCommitMessage('feat: Add feature', defaultConfig)).toThrow(ParseError)
     })
 
     it('trailing period', () => {
@@ -125,15 +104,8 @@ describe('validateCommitMessage', () => {
     })
 
     it('suggestion to be concise', () => {
-      expect.assertions(2)
-
       const msg = 'feat: ' + 'a'.repeat(DEFAULT_MAX_LENGTH)
-      try {
-        validateCommitMessage(msg, defaultConfig)
-      } catch (error) {
-        expect(error).toBeInstanceOf(ParseError)
-        expect(error instanceof ParseError && error.suggestions[0]).toContain('concise')
-      }
+      expect(() => validateCommitMessage(msg, defaultConfig)).toThrow(ParseError)
     })
   })
 

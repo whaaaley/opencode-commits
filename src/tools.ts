@@ -1,7 +1,7 @@
 import type { PluginInput } from '@opencode-ai/plugin'
 import { tool } from '@opencode-ai/plugin'
 import type { CommitsConfig } from './config.ts'
-import { ParseError } from './parser.ts'
+import { ParseError } from './errors.ts'
 import { safe, safeAsync } from './safe.ts'
 import { validateCommitMessage } from './validator.ts'
 

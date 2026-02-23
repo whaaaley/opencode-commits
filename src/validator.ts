@@ -1,6 +1,7 @@
 import type { CommitsConfig } from './config.ts'
 import { getAllScopes } from './config.ts'
-import { ParseError, parseCommitMessage } from './parser.ts'
+import { ParseError } from './errors.ts'
+import { parseCommitMessage } from './parser.ts'
 
 export const validateCommitMessage = (message: string, config: CommitsConfig): void => {
   const parsed = parseCommitMessage(message)

@@ -1,8 +1,4 @@
-export class ParseError extends Error {
-  constructor(message: string, public suggestions: string[] = []) {
-    super(message)
-  }
-}
+import { ParseError } from './errors.ts'
 
 export type ParsedCommitMessage = {
   type: string

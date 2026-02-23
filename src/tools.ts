@@ -1,14 +1,14 @@
 import type { PluginInput } from '@opencode-ai/plugin'
 import { tool } from '@opencode-ai/plugin'
 import type { CommitsConfig } from './config.ts'
-import { ParseError } from './errors.ts'
+import { CommitError } from './errors.ts'
 import { safe, safeAsync } from './safe.ts'
 import { validateCommitMessage } from './validator.ts'
 
 type BunShell = PluginInput['$']
 
 export const formatValidationError = (error: Error): string => {
-  if (error instanceof ParseError && error.suggestions.length > 0) {
+  if (error instanceof CommitError && error.suggestions.length > 0) {
     return error.message + '\n\nSuggestions:\n' + error.suggestions.map(s => `- ${s}`).join('\n')
   }
 

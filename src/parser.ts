@@ -1,4 +1,4 @@
-import { ParseError } from './errors.ts'
+import { CommitError } from './errors.ts'
 
 export type ParsedCommitMessage = {
   type: string
@@ -21,25 +21,25 @@ const parsePrefix = (prefix: string): PrefixParts => {
   }
 
   if (parenOpen === -1) {
-    throw new ParseError('Found closing parenthesis without opening parenthesis', [
+    throw new CommitError('Found closing parenthesis without opening parenthesis', [
       'Use the format: <type>(<scope>): <description>',
     ])
   }
 
   if (parenClose === -1) {
-    throw new ParseError('Found opening parenthesis without closing parenthesis', [
+    throw new CommitError('Found opening parenthesis without closing parenthesis', [
       'Use the format: <type>(<scope>): <description>',
     ])
   }
 
   if (parenClose < parenOpen) {
-    throw new ParseError('Mismatched parentheses in commit message', [
+    throw new CommitError('Mismatched parentheses in commit message', [
       'Use the format: <type>(<scope>): <description>',
     ])
   }
 
   if (parenClose !== prefix.length - 1) {
-    throw new ParseError('Unexpected characters after scope parentheses', [
+    throw new CommitError('Unexpected characters after scope parentheses', [
       'Use the format: <type>(<scope>): <description>',
     ])
   }
@@ -48,19 +48,19 @@ const parsePrefix = (prefix: string): PrefixParts => {
   const scope = prefix.slice(parenOpen + 1, parenClose)
 
   if (!scope) {
-    throw new ParseError('Scope must not be empty when parentheses are present', [
+    throw new CommitError('Scope must not be empty when parentheses are present', [
       'Either provide a scope or remove the parentheses',
     ])
   }
 
   if (!/^[a-z]/.test(scope)) {
-    throw new ParseError('Scope must start with a lowercase letter', [
+    throw new CommitError('Scope must start with a lowercase letter', [
       `Change "${scope}" to start with a lowercase letter`,
     ])
   }
 
   if (!/^[a-z][a-zA-Z0-9-]*$/.test(scope)) {
-    throw new ParseError('Scope must only contain letters, numbers, and hyphens', [
+    throw new CommitError('Scope must only contain letters, numbers, and hyphens', [
       `Change "${scope}" to use only letters, numbers, and hyphens`,
     ])
   }
@@ -72,14 +72,14 @@ export const parseCommitMessage = (message: string): ParsedCommitMessage => {
   const trimmed = message.trim()
 
   if (!trimmed) {
-    throw new ParseError('Commit message must not be empty', [
+    throw new CommitError('Commit message must not be empty', [
       'Provide a message in the format: <type>[(<scope>)]: <description>',
     ])
   }
 
   const colonIndex = trimmed.indexOf(':')
   if (colonIndex === -1) {
-    throw new ParseError('Commit message must contain a colon separator', [
+    throw new CommitError('Commit message must contain a colon separator', [
       'Use the format: <type>[(<scope>)]: <description>',
       `Example: feat: ${trimmed}`,
     ])
@@ -90,21 +90,21 @@ export const parseCommitMessage = (message: string): ParsedCommitMessage => {
   const { type, scope } = parsePrefix(prefix)
 
   if (!type) {
-    throw new ParseError('Commit type must not be empty', [
+    throw new CommitError('Commit type must not be empty', [
       'Provide a type before the colon',
       'Example: feat: add new feature',
     ])
   }
 
   if (!/^[a-z]+$/.test(type)) {
-    throw new ParseError('Commit type must contain only lowercase letters', [
+    throw new CommitError('Commit type must contain only lowercase letters', [
       `Change "${type}" to use only lowercase letters`,
       'Valid types include: feat, fix, docs, style, refactor, test, chore',
     ])
   }
 
   if (!description) {
-    throw new ParseError('Commit description must not be empty', [
+    throw new CommitError('Commit description must not be empty', [
       'Provide a description after the colon',
       `Example: ${prefix}: add new feature`,
     ])

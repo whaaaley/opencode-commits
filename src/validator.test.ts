@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import type { CommitsConfig } from './config.ts'
 import { DEFAULT_MAX_LENGTH, DEFAULT_TYPES } from './config.ts'
-import { ParseError } from './errors.ts'
+import { CommitError } from './errors.ts'
 import { validateCommitMessage } from './validator.ts'
 
 const defaultConfig: CommitsConfig = {
@@ -53,7 +53,7 @@ describe('validateCommitMessage', () => {
     })
 
     it('suggestions for similar types', () => {
-      expect(() => validateCommitMessage('fea: do something', defaultConfig)).toThrow(ParseError)
+      expect(() => validateCommitMessage('fea: do something', defaultConfig)).toThrow(CommitError)
     })
   })
 
@@ -63,7 +63,7 @@ describe('validateCommitMessage', () => {
     })
 
     it('includes allowed scopes in suggestion', () => {
-      expect(() => validateCommitMessage('feat(unknown): add feature', scopedConfig)).toThrow(ParseError)
+      expect(() => validateCommitMessage('feat(unknown): add feature', scopedConfig)).toThrow(CommitError)
     })
   })
 
@@ -73,7 +73,7 @@ describe('validateCommitMessage', () => {
     })
 
     it('suggestions for uppercase start', () => {
-      expect(() => validateCommitMessage('feat: Add feature', defaultConfig)).toThrow(ParseError)
+      expect(() => validateCommitMessage('feat: Add feature', defaultConfig)).toThrow(CommitError)
     })
 
     it('trailing period', () => {
@@ -105,7 +105,7 @@ describe('validateCommitMessage', () => {
 
     it('suggestion to be concise', () => {
       const msg = 'feat: ' + 'a'.repeat(DEFAULT_MAX_LENGTH)
-      expect(() => validateCommitMessage(msg, defaultConfig)).toThrow(ParseError)
+      expect(() => validateCommitMessage(msg, defaultConfig)).toThrow(CommitError)
     })
   })
 

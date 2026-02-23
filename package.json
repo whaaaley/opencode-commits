@@ -1,5 +1,5 @@
 {
-  "name": "opencode-commits",
+  "name": "opencode-conventional-commits",
   "version": "0.0.1-next.0",
   "description": "An OpenCode plugin that enforces Conventional Commits by validating commit messages before they reach git",
   "keywords": [
@@ -10,13 +10,13 @@
     "commits",
     "conventional-commits"
   ],
-  "homepage": "https://github.com/whaaaley/opencode-commits#readme",
+  "homepage": "https://github.com/whaaaley/opencode-conventional-commits#readme",
   "bugs": {
-    "url": "https://github.com/whaaaley/opencode-commits/issues"
+    "url": "https://github.com/whaaaley/opencode-conventional-commits/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/whaaaley/opencode-commits.git"
+    "url": "git+https://github.com/whaaaley/opencode-conventional-commits.git"
   },
   "license": "MIT",
   "author": "Dustin Dowell",
@@ -41,13 +41,10 @@
     "prepublishOnly": "npm run build",
     "test": "bun test"
   },
-  "dependencies": {
-    "zod": "4.1.8"
-  },
   "devDependencies": {
     "@opencode-ai/plugin": "1.1.12",
-    "@types/bun": "latest",
-    "dprint": "^0.49.1",
+    "@types/bun": "1.3.9",
+    "dprint": "latest",
     "typescript": "5.9.3"
   },
   "peerDependencies": {

@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import { z } from 'zod/v4'
-import { safeAsync } from './utils/safe.ts'
+import { z } from 'zod'
+import { safeAsync } from './safe.ts'
 
 export const DEFAULT_TYPES = [
   'feat',
@@ -25,14 +25,14 @@ const rawConfigSchema = z.object({
   maxLength: z.number().optional(),
 })
 
-export interface CommitsConfig {
+export type CommitsConfig = {
   types: string[]
   scopes?: Record<string, string[]>
   maxLength: number
 }
 
 export const loadConfig = async (directory: string): Promise<CommitsConfig> => {
-  const configPath = join(directory, 'opencode-commits.json')
+  const configPath = join(directory, 'opencode-conventional-commits.json')
 
   const result = await safeAsync(async () => {
     const raw = await readFile(configPath, 'utf-8')

@@ -7,14 +7,14 @@ describe('formatValidationError', () => {
     const error = new Error('Something went wrong')
     const result = formatValidationError(error)
 
-    expect(result).toBe('**Error:** Something went wrong')
+    expect(result).toBe('Error: Something went wrong')
   })
 
   it('should format a CommitError without suggestions', () => {
     const error = commitValidationError('Invalid commit type: "foo"')
     const result = formatValidationError(error)
 
-    expect(result).toBe('**Error:** Invalid commit type: "foo"')
+    expect(result).toBe('Error: Invalid commit type: "foo"')
   })
 
   it('should format a CommitError with suggestions', () => {
@@ -24,9 +24,9 @@ describe('formatValidationError', () => {
     const result = formatValidationError(error)
 
     expect(result).toBe([
-      '**Error:** Invalid commit type: "feta"',
+      'Error: Invalid commit type: "feta"',
       '',
-      '**Suggestions:**',
+      'Suggestions:',
       '- Did you mean "feat"?',
     ].join('\n'))
   })
@@ -39,9 +39,9 @@ describe('formatValidationError', () => {
     const result = formatValidationError(error)
 
     expect(result).toBe([
-      '**Error:** Invalid scope: "unknown"',
+      'Error: Invalid scope: "unknown"',
       '',
-      '**Suggestions:**',
+      'Suggestions:',
       '- Allowed scopes: api, ui, core',
       '- Run "git config" to see available scopes',
     ].join('\n'))
@@ -54,9 +54,9 @@ describe('formatValidationError', () => {
     const result = formatValidationError(error)
 
     expect(result).toBe([
-      '**Error:** Missing colon separator',
+      'Error: Missing colon separator',
       '',
-      '**Suggestions:**',
+      'Suggestions:',
       '- Example: feat: add new feature',
     ].join('\n'))
   })

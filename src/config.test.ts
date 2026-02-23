@@ -24,7 +24,7 @@ describe('loadConfig', () => {
   })
 
   it('should return defaults when config file is invalid JSON', async () => {
-    await writeFile(join(dir, 'opencode-commits.json'), 'not json')
+    await writeFile(join(dir, 'opencode-conventional-commits.json'), 'not json')
     const config = await loadConfig(dir)
 
     expect(config.types).toEqual([...DEFAULT_TYPES])
@@ -32,7 +32,7 @@ describe('loadConfig', () => {
   })
 
   it('should return defaults when config has invalid schema', async () => {
-    await writeFile(join(dir, 'opencode-commits.json'), JSON.stringify({ types: 123 }))
+    await writeFile(join(dir, 'opencode-conventional-commits.json'), JSON.stringify({ types: 123 }))
     const config = await loadConfig(dir)
 
     expect(config.types).toEqual([...DEFAULT_TYPES])
@@ -41,7 +41,7 @@ describe('loadConfig', () => {
 
   it('should merge custom types with defaults for other fields', async () => {
     const custom = { types: ['add', 'remove'] }
-    await writeFile(join(dir, 'opencode-commits.json'), JSON.stringify(custom))
+    await writeFile(join(dir, 'opencode-conventional-commits.json'), JSON.stringify(custom))
     const config = await loadConfig(dir)
 
     expect(config.types).toEqual(['add', 'remove'])
@@ -51,7 +51,7 @@ describe('loadConfig', () => {
 
   it('should merge custom maxLength with defaults for other fields', async () => {
     const custom = { maxLength: 100 }
-    await writeFile(join(dir, 'opencode-commits.json'), JSON.stringify(custom))
+    await writeFile(join(dir, 'opencode-conventional-commits.json'), JSON.stringify(custom))
     const config = await loadConfig(dir)
 
     expect(config.types).toEqual([...DEFAULT_TYPES])
@@ -66,7 +66,7 @@ describe('loadConfig', () => {
       },
     }
 
-    await writeFile(join(dir, 'opencode-commits.json'), JSON.stringify(custom))
+    await writeFile(join(dir, 'opencode-conventional-commits.json'), JSON.stringify(custom))
     const config = await loadConfig(dir)
 
     expect(config.scopes).toEqual({ feat: ['api', 'ui'], fix: ['core'] })
@@ -79,7 +79,7 @@ describe('loadConfig', () => {
       maxLength: 50,
     }
 
-    await writeFile(join(dir, 'opencode-commits.json'), JSON.stringify(custom))
+    await writeFile(join(dir, 'opencode-conventional-commits.json'), JSON.stringify(custom))
     const config = await loadConfig(dir)
 
     expect(config.types).toEqual(['add', 'remove'])
@@ -89,7 +89,7 @@ describe('loadConfig', () => {
 
   it('should ignore unknown fields in config', async () => {
     const custom = { types: ['feat'], unknownField: true }
-    await writeFile(join(dir, 'opencode-commits.json'), JSON.stringify(custom))
+    await writeFile(join(dir, 'opencode-conventional-commits.json'), JSON.stringify(custom))
     const config = await loadConfig(dir)
 
     expect(config.types).toEqual(['feat'])

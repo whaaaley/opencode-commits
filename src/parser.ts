@@ -1,13 +1,13 @@
 import { commitMessageParseError } from './errors.ts'
 
-export interface ParsedCommitMessage {
+export type ParsedCommitMessage = {
   type: string
   scope?: string
   description: string
   raw: string
 }
 
-interface PrefixParts {
+type PrefixParts = {
   type: string
   scope?: string
 }

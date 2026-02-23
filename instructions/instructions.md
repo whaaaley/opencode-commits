@@ -13,7 +13,7 @@ Reason: To ensure todos are completed sequentially
 Rule: complete the current todo before beginning the next one
 Reason: To ensure each todo is fully completed before moving on
 
-Rule: use a single options object instead of positional arguments when a function requires more than three parameters
+Rule: may use a single options object instead of positional arguments when a function requires more than three parameters
 Reason: To improve readability and maintainability of function signatures
 
 Rule: define the type as a named type alias directly above the function definition when using an options object for function parameters

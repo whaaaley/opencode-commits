@@ -1,17 +1,15 @@
 export type CommitErrorKind = 'CommitMessageParseError' | 'CommitValidationError'
 
-export interface CommitError extends Error {
+export type CommitError = Error & {
   kind: CommitErrorKind
   suggestions: string[]
 }
 
 const createCommitError = (kind: CommitErrorKind, message: string, suggestions: string[] = []): CommitError => {
-  const error = new Error(message) as CommitError
+  const error = new Error(message)
   error.name = kind
-  error.kind = kind
-  error.suggestions = suggestions
 
-  return error
+  return Object.assign(error, { kind, suggestions })
 }
 
 export const isCommitError = (error: unknown): error is CommitError => {

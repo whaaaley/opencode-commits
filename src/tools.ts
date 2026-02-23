@@ -1,22 +1,24 @@
+import type { PluginInput } from '@opencode-ai/plugin'
 import { tool } from '@opencode-ai/plugin'
 import type { CommitsConfig } from './config.ts'
 import { isCommitError } from './errors.ts'
-import type { BunShell } from './shell.ts'
-import { safe, safeAsync } from './utils/safe.ts'
+import { safe, safeAsync } from './safe.ts'
 import { validateCommitMessage } from './validator.ts'
+
+type BunShell = PluginInput['$']
 
 export const formatValidationError = (error: Error): string => {
   if (isCommitError(error)) {
-    let message = `**Error:** ${error.message}`
+    let message = `Error: ${error.message}`
 
     if (error.suggestions.length > 0) {
-      message += '\n\n**Suggestions:**\n' + error.suggestions.map(s => `- ${s}`).join('\n')
+      message += '\n\nSuggestions:\n' + error.suggestions.map(s => `- ${s}`).join('\n')
     }
 
     return message
   }
 
-  return `**Error:** ${error.message}`
+  return `Error: ${error.message}`
 }
 
 export const createCommitTool = ($: BunShell, config: CommitsConfig) => {
@@ -33,10 +35,10 @@ export const createCommitTool = ($: BunShell, config: CommitsConfig) => {
 
       const result = await safeAsync(() => $`git commit -m ${args.message}`.text())
       if (result.error) {
-        return `**Error:** Failed to commit staged changes: ${result.error.message}`
+        return `Error: Failed to commit staged changes: ${result.error.message}`
       }
 
-      return `**Committed successfully**\n\n\`\`\`\n${result.data.trim()}\n\`\`\``
+      return `Committed successfully\n\n\`\`\`\n${result.data.trim()}\n\`\`\``
     },
   })
 }
@@ -55,10 +57,10 @@ export const createAmendTool = ($: BunShell, config: CommitsConfig) => {
 
       const result = await safeAsync(() => $`git commit --amend -m ${args.message}`.text())
       if (result.error) {
-        return `**Error:** Failed to amend commit: ${result.error.message}`
+        return `Error: Failed to amend commit: ${result.error.message}`
       }
 
-      return `**Amended successfully**\n\n\`\`\`\n${result.data.trim()}\n\`\`\``
+      return `Amended successfully\n\n\`\`\`\n${result.data.trim()}\n\`\`\``
     },
   })
 }
@@ -74,7 +76,7 @@ export const createDiffTool = ($: BunShell) => {
 
       const result = await safeAsync(() => $`git diff ${flag}`.text())
       if (result.error) {
-        return `**Error:** Failed to get diff: ${result.error.message}`
+        return `Error: Failed to get diff: ${result.error.message}`
       }
 
       const trimmed = result.data.trim()
@@ -98,7 +100,7 @@ export const createLogTool = ($: BunShell) => {
 
       const result = await safeAsync(() => $`git log --oneline -n ${count}`.text())
       if (result.error) {
-        return `**Error:** Failed to get git log: ${result.error.message}`
+        return `Error: Failed to get git log: ${result.error.message}`
       }
 
       const trimmed = result.data.trim()
@@ -122,10 +124,10 @@ export const createUndoTool = ($: BunShell) => {
 
       const result = await safeAsync(() => $`git reset --soft HEAD~${count}`.text())
       if (result.error) {
-        return `**Error:** Failed to undo commits: ${result.error.message}`
+        return `Error: Failed to undo commits: ${result.error.message}`
       }
 
-      return `**Undid ${count} commit${count > 1 ? 's' : ''}** (changes kept staged)`
+      return `Undid ${count} commit${count > 1 ? 's' : ''} (changes kept staged)`
     },
   })
 }
@@ -137,7 +139,7 @@ export const createStatusTool = ($: BunShell) => {
     async execute() {
       const result = await safeAsync(() => $`git status`.text())
       if (result.error) {
-        return `**Error:** Failed to get git status: ${result.error.message}`
+        return `Error: Failed to get git status: ${result.error.message}`
       }
 
       return `\`\`\`\n${result.data.trim()}\n\`\`\``

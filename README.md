@@ -1,4 +1,4 @@
-# opencode-commits
+# opencode-conventional-commits
 
 An [OpenCode](https://opencode.ai) plugin that enforces [Conventional Commits](https://www.conventionalcommits.org/) by validating commit messages before they reach git. Provides tools for committing, amending, diffing, and viewing git log, all with built-in message parsing and validation.
 
@@ -8,7 +8,7 @@ Add to your `opencode.json`:
 
 ```json
 {
-  "plugin": ["opencode-commits"]
+  "plugin": ["opencode-conventional-commits"]
 }
 ```
 
@@ -104,7 +104,7 @@ To ensure all git commit operations go through the plugin's validation, disable 
 
 ```json
 {
-  "plugin": ["opencode-commits"],
+  "plugin": ["opencode-conventional-commits"],
   "permission": {
     "bash": {
       "git commit *": "deny",
@@ -118,11 +118,11 @@ This blocks the agent from running `git commit` directly through the shell, forc
 
 ## Configuration
 
-Create an `opencode-commits.json` file in your project root to customize behavior:
+Create an `opencode-conventional-commits.json` file in your project root to customize behavior:
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/whaaaley/opencode-commits/main/opencode-commits.schema.json",
+  "$schema": "https://raw.githubusercontent.com/whaaaley/opencode-conventional-commits/main/opencode-conventional-commits.schema.json",
   "types": ["feat", "fix", "build", "chore", "ci", "docs", "style", "refactor", "perf", "test", "revert"],
   "scopes": {
     "app": ["portal", "dashboard", "settings"],
